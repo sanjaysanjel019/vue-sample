@@ -5,13 +5,21 @@
     <Card :destinations="destinations" class="p-4 flex" >
       
     </Card>
+    
     </div>
-  </div>
+    <h1>Helo Guys</h1>
+    <!-- <p v-for="(info,index) in infos" :key="index"> The title of the post is: {{info[1]}}  </p> -->
+    <div v-if="error">
+      {{error}}
+    </div>
+    <p v-else v-for="info in infos" :key="info.id"> The title of the posts are:  {{info.title}}</p>
+  </div> 
 </template>
 
 <script>
 
 import Card from './components/Card'
+const axios = require('axios');
 
 export default {
   name: 'App',
@@ -21,6 +29,7 @@ export default {
   },
   data () {
     return {
+      infos:[],
        // eslint-disable-next-line no-unused-labels
     destinations:[
       {name:'Tilicho Lake',
@@ -39,7 +48,17 @@ export default {
       }
     ]
   }
+  },
+  async mounted () {
+    try{
+      const response = await axios.get('http://localhost:1337/posts');
+      this.infos = response.data;
     }
+    catch(error){
+      this.error = error;
+    }
+  }
+    
    
 }
 </script>
